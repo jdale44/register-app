@@ -11,36 +11,36 @@ pipeline {
                  }
          }
          stage("Checkout from SCM"){
-                steps {
+             steps {
                     git branch: 'main', credentialsId: 'github', url: 'https://github.com/jdale44/register-app'
                 }
         }
 
-        stage("Build Application"){
-            steps {
+         stage("Build Application"){
+             steps {
                 sh "mvn clean package"
             }
         }
-        stage("Test Aplication"){
-            steps {
+         stage("Test Aplication"){
+             steps {
                 sh "mvn test"
             }
         }
-        stage("SonorQube Analysis") {
-            steps {
+         stage("SonorQube Analysis"){
+             steps {
                 script {
-                     withSonarQubeEnv(credentialsId: 'jenkin-sonarqube-token'){
+                     withSonarQubeEnv(credentialsId: '	jenkin-sonarqube-token'){
                      sh "mvn sonar:sonar"
                 }
             }
          }   
       }
-       stage("Quality Gate"){
-           steps {
-               script {
+         stage("Quality Gate"){
+             steps {
+                 script {
                     waitForQualityGate abortPipeline: false, credentialsId: 'jenkin-sonarqube-token'
-               }
-           }
+                 }
+             }
+          }
        }
     }
-}
